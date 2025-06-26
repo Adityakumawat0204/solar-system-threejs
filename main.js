@@ -17,19 +17,21 @@ const nav = new OrbitControls(cam, draw.domElement);
 nav.enableDamping = true;
 
 // Textures
-const img = new THREE.TextureLoader();
+const textureLoader = new THREE.TextureLoader();
+
 const pics = {
-  Sun: img.load('textures/sun.jpg'),
-  Mercury: img.load('textures/mercury.jpg'),
-  Venus: img.load('textures/venus.jpg'),
-  Earth: img.load('textures/earth.jpg'),
-  Mars: img.load('textures/mars.jpg'),
-  Jupiter: img.load('textures/jupiter.jpg'),
-  Saturn: img.load('textures/saturn.jpg'),
-  Uranus: img.load('textures/uranus.jpg'),
-  Neptune: img.load('textures/neptune.jpg'),
-  SaturnRing: img.load('textures/saturn_ring.jpg')
+  Sun: textureLoader.load(new URL('./textures/sun.jpg', import.meta.url)),
+  Mercury: textureLoader.load(new URL('./textures/mercury.jpg', import.meta.url)),
+  Venus: textureLoader.load(new URL('./textures/venus.jpg', import.meta.url)),
+  Earth: textureLoader.load(new URL('./textures/earth.jpg', import.meta.url)),
+  Mars: textureLoader.load(new URL('./textures/mars.jpg', import.meta.url)),
+  Jupiter: textureLoader.load(new URL('./textures/jupiter.jpg', import.meta.url)),
+  Saturn: textureLoader.load(new URL('./textures/saturn.jpg', import.meta.url)),
+  Uranus: textureLoader.load(new URL('./textures/uranus.jpg', import.meta.url)),
+  Neptune: textureLoader.load(new URL('./textures/neptune.jpg', import.meta.url)),
+  SaturnRing: textureLoader.load(new URL('./textures/saturn_ring.jpg', import.meta.url)),
 };
+
 
 // Planet Data
 const spaceData = [
