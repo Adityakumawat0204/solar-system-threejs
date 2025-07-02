@@ -6,7 +6,7 @@ const world = new THREE.Scene();
 world.background = new THREE.Color(0x000000);
 
 const cam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-cam.position.set(0, 5, 15);
+cam.position.set(0,0.9, 11);
 
 const view = document.querySelector('canvas');
 const draw = new THREE.WebGLRenderer({ canvas: view, antialias: true });
@@ -32,7 +32,6 @@ const pics = {
   SaturnRing: textureLoader.load(new URL('./textures/saturn_ring.jpg', import.meta.url)),
 };
 
-
 // Planet Data
 const spaceData = [
   { name: 'Mercury', size: 0.2, orbitRadius: 2, speed: 0.014 },
@@ -57,15 +56,15 @@ const glow = new THREE.PointLight(0xffffff, 50, 150);
 glow.position.copy(star.position);
 world.add(glow);
 
-//Stars
+// Stars
 function sprinkleStars() {
   const geo = new THREE.BufferGeometry();
-  const count = 4000;
+  const count = 10000;
   const points = [];
   for (let i = 0; i < count; i++) {
-    points.push((Math.random() - 0.5) * 200);
-    points.push((Math.random() - 0.5) * 200);
-    points.push((Math.random() - 0.5) * 200);
+    points.push((Math.random() - 0.7) * 250);
+    points.push((Math.random() - 0.7) * 250);
+    points.push((Math.random() - 0.7) * 200);
   }
   geo.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
   const look = new THREE.PointsMaterial({ color: 0xffffff, size: 0.3 });
@@ -84,7 +83,7 @@ spaceData.forEach(info => {
   planet.name = info.name;
   world.add(planet);
 
-  //  orbit ellipse
+  // orbit ellipse
   const oval = new THREE.EllipseCurve(-2, 0, info.orbitRadius, info.orbitRadius * 0.7, 0, 2 * Math.PI);
   const path = oval.getPoints(1000).map(p => new THREE.Vector3(p.x, 0, p.y));
   const track = new THREE.BufferGeometry().setFromPoints(path);
@@ -105,7 +104,8 @@ spaceData.forEach(info => {
     planet.add(loop);
   }
 
-  globes.push({ ...info, mesh: planet });
+  // Add random initial angle so planets start at different orbit positions
+  globes.push({ ...info, mesh: planet, initialAngle: Math.random() * 2 * Math.PI });
 });
 
 // UI Controls 
@@ -177,14 +177,14 @@ view.addEventListener('mousemove', e => {
   posY = e.clientY;
 });
 
-//Animation Loop 
+// Animation Loop 
 const ticker = new THREE.Clock();
 function loop() {
   requestAnimationFrame(loop);
   if (!stop) {
     const time = ticker.getElapsedTime();
     globes.forEach(planet => {
-      const move = time * planet.speed;
+      const move = time * planet.speed + planet.initialAngle;  // Use initialAngle offset here
       const a = planet.orbitRadius;
       const b = a * 0.7;
       const x = -2 + a * Math.cos(move);
